@@ -5,6 +5,7 @@
   "main": "renderer.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "verify:handshake": "node test/verify_handshake.js",
     "start": "electron .",
     "package": "node package_python.js && npm run -s package-electron && npm run -s package-cleanup",
     "package-electron": "electron-builder --publish=never",
@@ -22,6 +23,7 @@
     },
     "files": [
       "renderer.js",
+      "server/",
       "icon.png",
       "node_modules/**/*"
     ],

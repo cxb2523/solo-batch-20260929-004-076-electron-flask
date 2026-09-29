@@ -2,6 +2,7 @@ from flask import Flask, render_template
 import os
 import sys
 from app.home import home as home_blueprint
+from app.home.views import healthz
 
 
 def init_extensions(app: Flask):
@@ -43,6 +44,9 @@ def create_app(config_object_name) -> Flask:
     with app.app_context():
         # Register Blueprints
         app.register_blueprint(home_blueprint, url_prefix="/")
+
+        # Register the supervisor liveness probe explicitly here.
+        app.add_url_rule("/healthz", view_func=healthz, methods=["GET"])
 
         @app.errorhandler(404)
         def page_not_found(error):
