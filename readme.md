@@ -33,6 +33,24 @@
 - Start Flask server manually: `python web_app/run_app.py`
 
 
+### Startup handshake & supervisor
+
+- The Electron main process no longer holds the Flask child handle. A resident
+  supervisor (`server/supervisor.js`) owns spawn, port probing and listener
+  teardown through the `createHandshake(child)` state machine in
+  `server/handshake.js` (`starting -> ready -> failed`, one restart only).
+- Readiness is decided exclusively by polling Flask's `GET /healthz`; child
+  stdout is never parsed.
+- `GET http://127.0.0.1:<supervisor-port>/state` reports the current state and
+  `GET /timeline` is an SSE stream that replays every transition event first.
+- `npm run verify:handshake` exercises ready, duplicate-ready, timeout,
+  non-zero exit and single-restart scenarios with fake child processes.
+- Configuration has a single source: `web_app/config.py` (`resolve_config`).
+  In dev it reads `FLASK_HOST`, `FLASK_PORT`, `SECRET_KEY`,
+  `FLASK_STARTUP_TIMEOUT_MS`, `FLASK_POLL_INTERVAL_MS`; packaged builds read
+  the bundled read-only `web_app/config.json` and never write it back.
+
+
 
 ### Bundling
 

@@ -1,0 +1,7 @@
+{
+  "host": "127.0.0.1",
+  "port": 4040,
+  "secret_key": "REPLACE ME",
+  "startup_timeout_ms": 30000,
+  "poll_interval_ms": 250
+}

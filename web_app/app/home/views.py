@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import jsonify, render_template
 from . import home
 
 
@@ -16,3 +16,9 @@ def dashboard():
     Render the dashboard template on the /dashboard route
     """
     return render_template("page/home/dashboard.html", title="Dashboard")
+
+
+@home.route("/healthz")
+def healthz():
+    """Liveness probe consumed by the supervisor handshake; stdout is never parsed."""
+    return jsonify(status="ok"), 200
